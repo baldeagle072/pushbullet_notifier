@@ -1,5 +1,5 @@
 /**
- *  Pushbullet Notifier
+ *  Pushbullet Notifier 1.0.1
  *
  *  Copyright 2015 Eric Roberts
  *
@@ -14,7 +14,7 @@
  *
  */
 definition(
-    name: "Pushbullet Notifier",
+    name: "Pushbullet Notifier 1.0.1",
     namespace: "baldeagle072",
     author: "Eric Roberts",
     description: "For use with @625alex's pushbullet device: https://github.com/625alex/SmartThings/blob/master/devices/Pushbullet.groovy It will push a message to the pushbullet device you specify.",
@@ -25,7 +25,7 @@ definition(
 
 
 preferences {
-	page name: "init"
+    page name: "init"
     page name: "capabilityChooser"
     page name: "deviceChooser"
     page name: "pushbulletSetup"
@@ -33,35 +33,35 @@ preferences {
 }
 
 def init() {
-	TRACE("init()")
+    TRACE("init()")
     if (state.installed) {
-    	return appInstalled()
+        return appInstalled()
     } else {
-    	return capabilityChooser()
+        return capabilityChooser()
     }
 }
 
 def capabilityChooser() {
-	TRACE("capabilityChooser()")
-	def pageProperties = [
-    	name: "capabilityChooser",
+    TRACE("capabilityChooser()")
+    def pageProperties = [
+        name: "capabilityChooser",
         title: "Choose a capability",
         nextPage: "deviceChooser",
         uninstall: true
     ]
     
     return dynamicPage(pageProperties) {
-    	section("Choose a capability to monitor") {
-        	//TODO: input for list of device types
+        section("Choose a capability to monitor") {
+            //TODO: input for list of device types
             input "theCapability", "enum", options: ["accelerationSensor", "contactSensor", "motionSensor", "presenceSensor", "smokeDetector", "switch", "waterSensor"], title: "Capability", required: true
         }
     }
 }
 
 def deviceChooser() {
-	TRACE("deviceChooser()")
-	def pageProperties = [
-    	name: "deviceChooser",
+    TRACE("deviceChooser()")
+    def pageProperties = [
+        name: "deviceChooser",
         title: "Choose a device",
         nextPage: "pushbulletSetup",
         install: state.installed,
@@ -73,12 +73,12 @@ def deviceChooser() {
     if (settings.oneAttribute) { onlyAttributeRequired = settings.oneAttribute }
     
     return dynamicPage(pageProperties) {
-    	section("Device(s) to monitor") {
-        	input "device", "capability.${theCapability}", title: "Device(s)", required: true, multiple: true
+        section("Device(s) to monitor") {
+            input "device", "capability.${theCapability}", title: "Device(s)", required: true, multiple: true
         }
         
         section("Monitor one attribute?") {
-        	paragraph "Turn it on and you will only monitor one attribute. Be sure to specify which one. If it is off, you will get notifications for every state change"
+            paragraph "Turn it on and you will only monitor one attribute. Be sure to specify which one. If it is off, you will get notifications for every state change"
             input "oneAttribute", "bool", title: "One attribute?", required: true, default: false, refreshAfterSelection: true
             input "onlyAttribute", "enum", title: "Just this attribute", required: onlyAttributeRequired, options: attributeValues(theCapability)
         }
@@ -86,22 +86,24 @@ def deviceChooser() {
 }
 
 def pushbulletSetup() {
-	TRACE("pushbulletSetup()")
-	def pageProperties = [
-    	name: "pushbulletSetup",
+    TRACE("pushbulletSetup()")
+    def pageProperties = [
+        name: "pushbulletSetup",
         title: "Choose a device type",
         install: true,
         uninstall: state.installed
     ]
     
     return dynamicPage(pageProperties) {
-    	section("Pushbullet options") {
-        	input "pushbullets", "device.pushbullet", title: "Pushbullet Device(s)", multiple: true, required: true
+        section("Pushbullet options") {
+            input "pushbullets", "device.pushbullet", title: "Pushbullet Device(s)", multiple: true, required: true
         }
         
         section("Message options") {
             paragraph "The standard message is \"\${evt.displayName} is \${evt.value}\""
             input "userMsg", "text", title: "User defined message (optional)", required: false
+            paragraph "You can have the message displayed in the title so it shows up on the lock screen. Default is \"Smartthings: \${app.label}\". This will show \"ST: \${message}\""
+            input "showOnTitle", "bool", title: "Show message in title?"
             paragraph "You can specify the minimum number of minutes between notifications for each device. It defaults to every message"
             input "frequency", "decimal", title: "Minutes (optional)", required: false
         }
@@ -114,17 +116,17 @@ def pushbulletSetup() {
 }
 
 def appInstalled() {
-	TRACE("appInstalled()")
-	def pageProperties = [
-    	name: "appInstalled",
+    TRACE("appInstalled()")
+    def pageProperties = [
+        name: "appInstalled",
         title: "Setup Pages",
         install: true,
         uninstall: true
     ]
     
     return dynamicPage(pageProperties) {
-    	section("Setup Pages") {
-        	href(name: "hrefCapability", title: "Capability", description:"Change capability of device and device", page: "capabilityChooser")
+        section("Setup Pages") {
+            href(name: "hrefCapability", title: "Capability", description:"Change capability of device and device", page: "capabilityChooser")
             href(name: "hrefDevice", title: "Device", description:"Change the device", page: "deviceChooser")
             href(name: "hrefPushbullet", title: "Pushbullet", description:"Change pushbullet options", page: "pushbulletSetup")
         }
@@ -132,51 +134,51 @@ def appInstalled() {
 }
 
 def installed() {
-	TRACE("installed()")
-	log.debug "Installed with settings: ${settings}"
+    TRACE("installed()")
+    log.debug "Installed with settings: ${settings}"
 
-	initialize()
+    initialize()
 }
 
 def updated() {
-	TRACE("updated()")
-	log.debug "Updated with settings: ${settings}"
+    TRACE("updated()")
+    log.debug "Updated with settings: ${settings}"
 
-	unsubscribe()
-	initialize()
+    unsubscribe()
+    initialize()
 }
 
 def initialize() {
-	TRACE("initialize()")
-	def subscribeCapability = ""
+    TRACE("initialize()")
+    def subscribeCapability = ""
     if (oneAttribute) {
-    	subscribeCapability = capabilityAttribute(theCapability) + "." + onlyAttribute
+        subscribeCapability = capabilityAttribute(theCapability) + "." + onlyAttribute
     } else {
-    	subscribeCapability = capabilityAttribute(theCapability)
+        subscribeCapability = capabilityAttribute(theCapability)
     }
     TRACE("subscribeCapability: $subscribeCapability, device: $settings.device")
-	subscribe(settings.device, subscribeCapability, "handler")
+    subscribe(settings.device, subscribeCapability, "handler")
     state.installed = true
 }
 
 def handler(evt) {
-	TRACE("handler(evt: $evt), frequency: $frequency")
+    TRACE("handler(evt: $evt), frequency: $frequency")
     if (frequency) {
-		def lastTime = state[evt.deviceId]
+        def lastTime = state[evt.deviceId]
         TRACE("lastTime: $lastTime")
         if (lastTime) { TRACE("lastTime - now(): ${now() - lastTime}") }
-		if (lastTime == null || now() - lastTime >= frequency * 60000) {
-			sendMessage(getMessage(evt))
+        if (lastTime == null || now() - lastTime >= frequency * 60000) {
+            sendMessage(getMessage(evt))
             state[evt.deviceId] = now()
-		}
-	} else {
-    	sendMessage(getMessage(evt))
+        }
+    } else {
+        sendMessage(getMessage(evt))
     }
-	
+    
 }
 
 private attributeValues(theCapability) {
-	TRACE("attributeValues(theCapability: $theCapability)")
+    TRACE("attributeValues(theCapability: $theCapability)")
     switch(theCapability) {
         case "accelerationSensor":
             return ["inactive", "active"]
@@ -198,7 +200,7 @@ private attributeValues(theCapability) {
 }
 
 private capabilityAttribute(theCapability) {
-	TRACE("capabilityAttribute(theCapability: $theCapability)")
+    TRACE("capabilityAttribute(theCapability: $theCapability)")
     switch(theCapability) {
         case "accelerationSensor":
             return "acceleration"
@@ -220,24 +222,26 @@ private capabilityAttribute(theCapability) {
 }
 
 private getMessage(evt) {
-	TRACE("getMessage(evt - displayName: $evt.displayName, value = $evt.value)")
-	if (userMsg) {
-    	return userMsg
+    TRACE("getMessage(evt - displayName: $evt.displayName, value = $evt.value)")
+    if (userMsg) {
+        return userMsg
     } else if (theCapability == "smokeDetector") {
-    	return "${evt.displayName}: Smoke is ${evt.value}"
+        return "${evt.displayName}: Smoke is ${evt.value}"
     } else {
         return "${evt.displayName} is ${evt.value}"
     }
 }
 
 private sendMessage(msg) { 
-	TRACE("sendMessage(msg: $msg)")
+    TRACE("sendMessage(msg: $msg)")
     log.debug "send message: ${msg}"
+    def title = "SmartThings: ${app.label}"
+    if (showOnTitle) { title = "ST: ${msg}" }
     pushbullets.each() {it ->
-    	it.push("SmartThings ${app.label}", msg)
+        it.push(title, msg)
     }
 }
 
 private TRACE(msg) {
-	log.debug(msg)
+    log.debug(msg)
 }
