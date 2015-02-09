@@ -1,5 +1,6 @@
 /**
- *  Pushbullet Notifier 1.0.1
+ *  Pushbullet Notifier 1.1.0
+ *  2/9/2015
  *
  *  Copyright 2015 Eric Roberts
  *
@@ -14,7 +15,7 @@
  *
  */
 definition(
-    name: "Pushbullet Notifier 1.0.1",
+    name: "Pushbullet Notifier 1.1.0",
     namespace: "baldeagle072",
     author: "Eric Roberts",
     description: "For use with @625alex's pushbullet device: https://github.com/625alex/SmartThings/blob/master/devices/Pushbullet.groovy It will push a message to the pushbullet device you specify.",
@@ -53,7 +54,7 @@ def capabilityChooser() {
     return dynamicPage(pageProperties) {
         section("Choose a capability to monitor") {
             //TODO: input for list of device types
-            input "theCapability", "enum", options: ["accelerationSensor", "contactSensor", "motionSensor", "presenceSensor", "smokeDetector", "switch", "waterSensor"], title: "Capability", required: true
+            input "theCapability", "enum", options: ["accelerationSensor", "contactSensor", "motionSensor", "presenceSensor", "smokeDetector", "switch", "waterSensor", "temperatureMeasurement"], title: "Capability", required: true
         }
     }
 }
@@ -75,6 +76,14 @@ def deviceChooser() {
     return dynamicPage(pageProperties) {
         section("Device(s) to monitor") {
             input "device", "capability.${theCapability}", title: "Device(s)", required: true, multiple: true
+        }
+        
+        if (theCapability == "temperatureMeasurement") {
+            section("Temperature Settings") {
+                paragraph "Choose if it goes above or bellow the chosen temperature"
+                input "aboveOrBelow", "enum", title: "Above or Below?", options: ["Above", "Below"], required: true
+                input "temperatureThreshold", "decimal", title: "Temperature Threshold"
+            }
         }
         
         section("Monitor one attribute?") {
@@ -105,6 +114,7 @@ def pushbulletSetup() {
             paragraph "You can have the message displayed in the title so it shows up on the lock screen. Default is \"Smartthings: \${app.label}\". This will show \"ST: \${message}\""
             input "showOnTitle", "bool", title: "Show message in title?"
             paragraph "You can specify the minimum number of minutes between notifications for each device. It defaults to every message"
+            if (theCapability == "temperatureMeasurement") { paragraph "Tip: Indicate a number of minutes, otherwise you will get a notification every time the temperature changes." }
             input "frequency", "decimal", title: "Minutes (optional)", required: false
         }
         
@@ -162,7 +172,20 @@ def initialize() {
 }
 
 def handler(evt) {
-    TRACE("handler(evt: $evt), frequency: $frequency")
+    TRACE("handler(evt: $evt)")
+    if (theCapability == "temperatureMeasurement") {
+        if (aboveOrBelow == "Above" && evt.numericValue > temperatureThreshold) {
+            checkFrequency(evt)
+        } else if  (aboveOrBelow == "Below" && evt.numericValue < temperatureThreshold){
+            checkFrequency(evt)
+        }
+    } else {
+        checkFrequency(evt)
+    }
+}
+
+def checkFrequency(evt) {
+    TRACE("checkFrequency(evt: $evt), frequency: $frequency")
     if (frequency) {
         def lastTime = state[evt.deviceId]
         TRACE("lastTime: $lastTime")
@@ -174,7 +197,6 @@ def handler(evt) {
     } else {
         sendMessage(getMessage(evt))
     }
-    
 }
 
 private attributeValues(theCapability) {
@@ -194,6 +216,8 @@ private attributeValues(theCapability) {
             return ["on","off"]
         case "waterSensor":
             return ["wet","dry"]
+        case "temperatureMeasurement":
+            return ["temperature"]
         default:
             return ["UNDEFINED"]
     }
@@ -216,6 +240,8 @@ private capabilityAttribute(theCapability) {
             return "switch"
         case "waterSensor":
             return "water"
+        case "temperatureMeasurement":
+            return "temperature"
         default:
             return "UNDEFINED"
     }
