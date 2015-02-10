@@ -5,6 +5,10 @@
 
 SmartApps and device type to push messages through Pushbullet (www.pushbullet.com) to specific devices.
 
+*If you find this useful and feel so inclined, please donate.*
+
+[![PayPal](https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=M93LDK4QJSSUS)
+
 ### Features
 
 * Setup a Pushbullet device to recieve notifications on.
