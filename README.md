@@ -22,13 +22,13 @@ SmartApps and device type to push messages through Pushbullet (www.pushbullet.co
 * Show the message in the title or leave it as the app label. (The title shows on the lock screen when you recieve a notification)
 * Set a minimum number of minutes between notifications (So you don't get notified every time that motion sensor changes state!)
 
-### Instalation
+## Instalation
 
-## Pushbullet.com
+### Pushbullet.com
 
 First you need to go to pushbullet.com, sign up for an account, and install Pushbullet on the device(s) that you want to get notified on.
 
-## Device Service Manager
+### Device Service Manager
 
 You need to have a Pushbullet device to use the notifier. The Pushbullet Connect app will help set up the device and is available in the "My Apps" section of the Shared
 Smart Apps in [SmartThings IDE](https://graph.api.smartthings.com).
@@ -54,7 +54,7 @@ the menu ribbon all the way to the left.
 appears below the menu ribbon. Tap it and follow setup instructions.
 12. When it asks for your API key, you can find it at http://www.pushbullet.com/account
 
-## App
+### App
 
 Pushbullet Notifier app is available in the "My Apps" section of the Shared
 Smart Apps in [SmartThings IDE](https://graph.api.smartthings.com).
@@ -63,12 +63,12 @@ Smart Apps in [SmartThings IDE](https://graph.api.smartthings.com).
 
 Follow steps 1-5 from service manager installation.
 
-6. Select "Pushbullet Notifier" app from the list and click the red "Overwrite" button
+* Select "Pushbullet Notifier" app from the list and click the red "Overwrite" button
 in the bottom right corner.
 
 Follow steps 7-10 from service manager instalation.
 
-11. "Pushbullet Notifier" app should be available in the list of SmartApps that
+* "Pushbullet Notifier" app should be available in the list of SmartApps that
 appears below the menu ribbon. Tap it and follow setup instructions.
 
 
