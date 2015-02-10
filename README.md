@@ -28,7 +28,7 @@ SmartApps and device type to push messages through Pushbullet (www.pushbullet.co
 
 ### Pushbullet.com
 
-First you need to go to pushbullet.com, sign up for an account, and install Pushbullet on the device(s) that you want to get notified on.
+First you need to go to www.pushbullet.com, sign up for an account, and install Pushbullet on the device(s) that you want to get notified on.
 
 ### Device Service Manager
 
