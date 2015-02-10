@@ -1,5 +1,6 @@
 # Pushbullet Notifier - readme under construction
 *Pushbullet Notifier for Smartthings*
+"If I have seen further than others, it is by standing upon the shoulders of giants." - Isaac Newton *Thanks, @625Alex, for the work you did in* https://github.com/625alex/SmartThings/blob/master/devices/Pushbullet.groovy *to get me here.*
 
 SmartApps and device type to push messages through Pushbullet (www.pushbullet.com) to specific devices.
 
