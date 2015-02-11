@@ -64,7 +64,7 @@ The Pushbullet Notifier app is where you create your notifications.
 *You can set up multiple instances of the app to use multiple devices with different capabilities or to have different messages*
 
 1. Go to "My SmartApps" section and click on the "+ New SmartApp" button on the right.
-2. Click on "From Code" and copy/paste the code from the "pushbullet_connect.groovy" and click "Create".
+2. Click on "From Code" and copy/paste the code from the "pushbullet_notifier.groovy" and click "Create".
 3. Click the blue "Save" button above the editor window.
 4. Click the "Publish" button next to it and select "For Me". You have now self-published your SmartApp.
 5. Open the SmartThings mobile app on iPhone or Android and go to the Dashboard.
