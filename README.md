@@ -34,47 +34,41 @@ SmartApps and device type to push messages through Pushbullet (www.pushbullet.co
 
 First you need to go to www.pushbullet.com, sign up for an account, and install Pushbullet on the device(s) that you want to get notified on.
 
+### Device Type
+
+You need to have a Pushbullet device to use the notifier. To use the service manager, you first have to install the device type in [SmartThings IDE](https://graph.api.smartthings.com).
+
+1. Go to the "My Device Types" section and click on the "+ New SmartDevice" button on the right.
+2. Click on "From Code" and copy/paste the code from the "pushbullet_device.groovy" and click "Create".
+3. Click the blue "Save" button above the editor window.
+4. Click the "Publish" button next to it and select "For Me". The device type is now installed.
+
 ### Device Service Manager
 
-You need to have a Pushbullet device to use the notifier. The Pushbullet Connect app will help set up the device and is available in the "My Apps" section of the Shared
-Smart Apps in [SmartThings IDE](https://graph.api.smartthings.com).
+The Pushbullet Connect app will help set up the device. You can use a new instance of the app for each Pushbullet device you want to push to.
 
 1. Go to "My SmartApps" section and click on the "+ New SmartApp" button on the
 right.
-2. On the "New SmartApp" page, fill out mandatory "Name" and "Description"
-fields (it does not matter what you put there).
-3. Click the "Create" button at the bottom.
-4. When a new app template opens in the IDE, click on the "Browse SmartApps"
-drop-down list in the upper right corner and select "Browse Shared SmartApps".
-A list of shared SmartApps will appear on the left side of the editor window.
-5. Scroll down to "My Apps" section and click on it.
-6. Select "Pushbullet Connect" app from the list and click the red "Overwrite" button
-in the bottom right corner.
-7. Click the blue "Save" button above the editor window.
-8. Click the "Publish" button next to it and select "For Me". You have now
-self-published your SmartApp.
-9. Open SmartThings mobile app on iPhone or Android and go to the Dashboard.
-10. Tap on the round "+" button and navigate to "My Apps" section by swiping
-the menu ribbon all the way to the left.
-11. "Pushbullet Connect" app should be available in the list of SmartApps that
-appears below the menu ribbon. Tap it and follow setup instructions.
-12. When it asks for your API key, you can find it at http://www.pushbullet.com/account
+2. Click on "From Code" and copy/paste the code from the "pushbullet_connect.groovy" and click "Create".
+3. Click the blue "Save" button above the editor window.
+4. Click the "Publish" button next to it and select "For Me". You have now self-published your SmartApp.
+5. Open the SmartThings mobile app on iPhone or Android and go to the Dashboard.
+6. Tap on the round "+" button and navigate to "My Apps" section by swiping the menu ribbon all the way to the left.
+7. The "Pushbullet Connect" app should be available in the list of SmartApps that appears below the menu ribbon. Tap it and follow the setup instructions.
+8. When it asks for your API key, you can find it at http://www.pushbullet.com/account (Pro tip: Use pushbullet to get the API key from your computer to your mobile device without having to enter it.)
 
 ### App
 
-Pushbullet Notifier app is available in the "My Apps" section of the Shared
-Smart Apps in [SmartThings IDE](https://graph.api.smartthings.com).
+The Pushbullet Notifier app is where you create your notifications.
 
 *You can set up multiple instances of the app to use multiple devices with different capabilities or to have different messages*
 
-Follow steps 1-5 from service manager installation.
-
-* Select "Pushbullet Notifier" app from the list and click the red "Overwrite" button
-in the bottom right corner.
-
-Follow steps 7-10 from service manager instalation.
-
-* "Pushbullet Notifier" app should be available in the list of SmartApps that
-appears below the menu ribbon. Tap it and follow setup instructions.
+1. Go to "My SmartApps" section and click on the "+ New SmartApp" button on the right.
+2. Click on "From Code" and copy/paste the code from the "pushbullet_connect.groovy" and click "Create".
+3. Click the blue "Save" button above the editor window.
+4. Click the "Publish" button next to it and select "For Me". You have now self-published your SmartApp.
+5. Open the SmartThings mobile app on iPhone or Android and go to the Dashboard.
+6. Tap on the round "+" button and navigate to "My Apps" section by swiping the menu ribbon all the way to the left.
+7. The "Pushbullet Notifier" app should be available in the list of SmartApps that appears below the menu ribbon. Tap it and follow the setup instructions.
 
 
