@@ -20,6 +20,8 @@ SmartApps and device type to push messages through Pushbullet (www.pushbullet.co
 	* Smoke
 	* Switch
 	* Water
+	* Sleep
+	* Button
 	* Temperature (can set a threshold to get notified if it goes above or below a certain temperature.)
 * Choose multiple device with the same capability.
 * Watch for just one attribute or every event from the device. (ex. Presence can notify you when someone arrives only, leaves only, or both)
@@ -70,5 +72,12 @@ The Pushbullet Notifier app is where you create your notifications.
 5. Open the SmartThings mobile app on iPhone or Android and go to the Dashboard.
 6. Tap on the round "+" button and navigate to "My Apps" section by swiping the menu ribbon all the way to the left.
 7. The "Pushbullet Notifier" app should be available in the list of SmartApps that appears below the menu ribbon. Tap it and follow the setup instructions.
+
+## Revision History
+
+#### Version 1.2.0. Released 2/12/2015
+* New capabilities: Sleep Sensor and Button
+* Capabilities now read easier in the app
+* Changed backround code to add capabilities easier in the future.
 
 

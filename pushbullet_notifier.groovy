@@ -1,6 +1,6 @@
 /**
- *  Pushbullet Notifier 1.1.0
- *  2/9/2015
+ *  Pushbullet Notifier 1.2.0
+ *  2/12/2015
  *
  *  Copyright 2015 Eric Roberts
  *
@@ -15,7 +15,7 @@
  *
  */
 definition(
-    name: "Pushbullet Notifier 1.1.0",
+    name: "Pushbullet Notifier 1.2.0",
     namespace: "baldeagle072",
     author: "Eric Roberts",
     description: "For use with @625alex's pushbullet device: https://github.com/625alex/SmartThings/blob/master/devices/Pushbullet.groovy It will push a message to the pushbullet device you specify.",
@@ -54,7 +54,7 @@ def capabilityChooser() {
     return dynamicPage(pageProperties) {
         section("Choose a capability to monitor") {
             //TODO: input for list of device types
-            input "theCapability", "enum", options: ["accelerationSensor", "contactSensor", "motionSensor", "presenceSensor", "smokeDetector", "switch", "waterSensor", "temperatureMeasurement"], title: "Capability", required: true
+            input "theCapability", "enum", options: getCapabilities(), title: "Capability", required: true
         }
     }
 }
@@ -199,28 +199,22 @@ def checkFrequency(evt) {
     }
 }
 
-private attributeValues(theCapability) {
-    TRACE("attributeValues(theCapability: $theCapability)")
-    switch(theCapability) {
-        case "accelerationSensor":
-            return ["inactive", "active"]
-        case "contactSensor":
-            return ["open","closed"]
-        case "motionSensor":
-            return ["active","inactive"]
-        case "presenceSensor":
-            return ["present", "not present"]
-        case "smokeDetector":
-            return ["clear", "detected", "tested"]
-        case "switch":
-            return ["on","off"]
-        case "waterSensor":
-            return ["wet","dry"]
-        case "temperatureMeasurement":
-            return ["temperature"]
-        default:
-            return ["UNDEFINED"]
-    }
+private getCapabilities() {
+    TRACE("getCapabilities()")
+    
+    def allCapabilities = [
+        "accelerationSensor": "Acceleration", 
+        "contactSensor": "Contact", 
+        "motionSensor": "Motion", 
+        "presenceSensor": "Presence", 
+        "smokeDetector": "Smoke Detector", 
+        "switch": "Swtich", 
+        "waterSensor": "Water Sensor", 
+        "temperatureMeasurement": "Temperature", 
+        "sleepSensor": "Sleep",
+        "button": "Button"
+    ]
+    return allCapabilities
 }
 
 private capabilityAttribute(theCapability) {
@@ -242,8 +236,40 @@ private capabilityAttribute(theCapability) {
             return "water"
         case "temperatureMeasurement":
             return "temperature"
+        case "sleepSensor":
+            return "sleeping"
+        case "button":
+            return "button"
         default:
             return "UNDEFINED"
+    }
+}
+
+private attributeValues(theCapability) {
+    TRACE("attributeValues(theCapability: $theCapability)")
+    switch(theCapability) {
+        case "accelerationSensor":
+            return ["inactive", "active"]
+        case "contactSensor":
+            return ["open","closed"]
+        case "motionSensor":
+            return ["active","inactive"]
+        case "presenceSensor":
+            return ["present", "not present"]
+        case "smokeDetector":
+            return ["clear", "detected", "tested"]
+        case "switch":
+            return ["on","off"]
+        case "waterSensor":
+            return ["wet","dry"]
+        case "temperatureMeasurement":
+            return ["temperature"]
+        case "sleepSensor":
+            return ["not sleeping", "sleeping"]
+        case "button":
+            return ["held", "pushed"]
+        default:
+            return ["UNDEFINED"]
     }
 }
 
@@ -253,6 +279,8 @@ private getMessage(evt) {
         return userMsg
     } else if (theCapability == "smokeDetector") {
         return "${evt.displayName}: Smoke is ${evt.value}"
+    } else if (theCapability == "button") {
+        return "${evt.displayName} was ${evt.value}"
     } else {
         return "${evt.displayName} is ${evt.value}"
     }
