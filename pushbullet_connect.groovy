@@ -17,7 +17,7 @@ definition(
     name: "Pushbullet Connect",
     namespace: "baldeagle072",
     author: "Eric Roberts",
-    description: "Painless setup of Pushbullet device",
+    description: "Painless setup of a Pushbullet device",
     category: "My Apps",
     iconUrl: "https://baldeagle072.github.io/pushbullet_notifier/images/PushbulletLogo@1x.png",
     iconX2Url: "https://baldeagle072.github.io/pushbullet_notifier/images/PushbulletLogo@2x.png",
@@ -25,28 +25,28 @@ definition(
 
 
 preferences {
-	page name: "enterAPI"
+    page name: "enterAPI"
     page name: "selectDevice"
 }
 
 def enterAPI() {
-	def pageProperties = [
-    	name: "enterAPI",
+    def pageProperties = [
+        name: "enterAPI",
         title: "Choose a capability",
         nextPage: "selectDevice",
         uninstall: true
     ]
     
     return dynamicPage(pageProperties) {
-    	section("Enter your API key") {
+        section("Enter your API key") {
             input "apiKey", "text", title: "API Key", required: true
         }
     }
 }
 
 def selectDevice() {
-	def pageProperties = [
-    	name: "selectDevice",
+    def pageProperties = [
+        name: "selectDevice",
         title: "Choose a device",
         install: true,
         uninstall: true
@@ -57,14 +57,14 @@ def selectDevice() {
     if (pushbulletDevice) { log.debug ("pushbulletDevice: $pushbulletDevice") }
     
     return dynamicPage(pageProperties) {
-    	section("Choose a pushbullet device to add") {
+        section("Choose a pushbullet device to add") {
             input "pushbulletDevice", "enum", options: deviceOptions, title: "Pushbullet Device", required: true, multiple: false, refreshAfterSelection:true
         }
     }
 }
 
 private getDeviceOptions(apiKey) {
-	TRACE("getDeviceOptions(apiKey: $apiKey)")
+    TRACE("getDeviceOptions(apiKey: $apiKey)")
     
     def deviceOptions = [:]
     
@@ -75,9 +75,9 @@ private getDeviceOptions(apiKey) {
     ]
 
     httpGet(deviceListParams) { resp ->
-    	log.debug("resp.data.devices: ${resp.data.devices}")
+        log.debug("resp.data.devices: ${resp.data.devices}")
         for (device in resp.data.devices) {
-        	log.debug("device.nickname: ${device.nickname}, device.iden: ${device.iden}")
+            log.debug("device.nickname: ${device.nickname}, device.iden: ${device.iden}")
             deviceOptions[device.iden] = device.nickname
             
         }
@@ -89,23 +89,23 @@ private getDeviceOptions(apiKey) {
 }
 
 def installed() {
-	log.debug "Installed with settings: ${settings}"
+    log.debug "Installed with settings: ${settings}"
 
-	initialize()
+    initialize()
 }
 
 def updated() {
-	log.debug "Updated with settings: ${settings}"
-	
-	unsubscribe()
-	initialize()
+    log.debug "Updated with settings: ${settings}"
+    
+    unsubscribe()
+    initialize()
 }
 
 def initialize() {
-	// addChildDevice with apiKey = apiKey, iden = pushbulletDevice
+    // addChildDevice with apiKey = apiKey, iden = pushbulletDevice
     //apiKey: settings.apiKey, iden: settings.pushbulletDevice
     if (!state.stIden) {
-    	def d = addChildDevice("baldeagle072", "Pushbullet", settings.pushbulletDevice, null, [name: "pushbullet.${state.devices[settings.pushbulletDevice]}", label: state.devices[settings.pushbulletDevice], completedSetup: true])
+        def d = addChildDevice("baldeagle072", "Pushbullet", settings.pushbulletDevice, null, [name: "pushbullet.${state.devices[settings.pushbulletDevice]}", label: state.devices[settings.pushbulletDevice], completedSetup: true])
         state.stIden = settings.pushbulletDevice
     }
     state.apiKey = settings.apiKey
@@ -123,10 +123,10 @@ private removeChildDevices(delete) {
 }
 
 def push(title, message) {
-	log.debug "push title: $title message: $message, key: ${state.apiKey}, iden: ${state.iden}" 
+    log.debug "push title: $title message: $message, key: ${state.apiKey}, iden: ${state.iden}" 
     def url = "https://${state.apiKey}@api.pushbullet.com/v2/pushes"
-	    
-	def successClosure = { response ->
+        
+    def successClosure = { response ->
       log.debug "Push request was successful, $response.data"
       sendEvent(name:"push", value:[title: title, message: message], isStateChange:true)
     }
@@ -135,7 +135,7 @@ def push(title, message) {
         u: state.apiKey,
         type: "note",
         title: title ?: "SmartThings",
-      	body: message,
+        body: message,
         device_iden: state.iden
     ]
     
@@ -152,5 +152,5 @@ def push(title, message) {
 }
 
 def TRACE(msg) {
-	log.debug(msg)
+    log.debug(msg)
 }
