@@ -1,5 +1,5 @@
 /**
- *  Pushbullet Connect
+ *  Pushbullet Connect - updated 4/23/15
  *
  *  Copyright 2015 Eric Roberts
  *
@@ -78,8 +78,9 @@ private getDeviceOptions(apiKey) {
         log.debug("resp.data.devices: ${resp.data.devices}")
         for (device in resp.data.devices) {
             log.debug("device.nickname: ${device.nickname}, device.iden: ${device.iden}")
-            deviceOptions[device.iden] = device.nickname
-            
+            if (device.nickname) {
+                deviceOptions[device.iden] = device.nickname
+            }
         }
     }
     
@@ -104,6 +105,7 @@ def updated() {
 def initialize() {
     // addChildDevice with apiKey = apiKey, iden = pushbulletDevice
     //apiKey: settings.apiKey, iden: settings.pushbulletDevice
+    log.debug("init settings.pushbulletDevice: ${settings.pushbulletDevice}, state.devices: ${state.devices}, state.devices[settings.pushbulletDevice]: ${state.devices[settings.pushbulletDevice]}")
     if (!state.stIden) {
         def d = addChildDevice("baldeagle072", "Pushbullet", settings.pushbulletDevice, null, [name: "pushbullet.${state.devices[settings.pushbulletDevice]}", label: state.devices[settings.pushbulletDevice], completedSetup: true])
         state.stIden = settings.pushbulletDevice
